@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+ postgres:
+   image: postgis/postgis:16-3.4
+   container_name: postgres
+   environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+     - POSTGRES_TIMEZONE=Europe/Minsk
+     - POSTGRES_LOG_TIMEZONE=Europe/Minsk
+   ports:
+     - '5432:5432'
+   volumes:
+     - '${POSTGRES_DATA}:/var/lib/postgresql/data'
+   restart: always
+
+ pgadmin:
+   container_name: pgadmin
+   image: dpage/pgadmin4:7
+   environment:
+     PGADMIN_DEFAULT_EMAIL: admin@admin.com
+     PGADMIN_DEFAULT_PASSWORD: admin
+   ports:
+     - "5050:80"
+   volumes:
+     - '${PG_ADMIN_DATA}:/var/lib/pgadmin'
+   restart: always
+
+geoserver:
+    image: docker.osgeo.org/geoserver:2.26.x
+    container_name: geoserver
+    ports:
+      - "8092:8080"
+    environment:
+      INSTALL_EXTENSIONS: "true"
+      STABLE_EXTENSIONS: "ysld,h2"
+      COMMUNITY_EXTENSIONS: "ogcapi-features,ogcapi-images,ogcapi-maps,ogcapi-styles,ogcapi-tiles,sec-keycloak,sec-oauth2-openid-connect,spatialjson"
+    volumes:
+      - '${GEOSERVER_DATA}:/opt/geoserver_data'
+      - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
