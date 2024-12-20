@@ -3,7 +3,7 @@ version: "3.8"
 services:
  postgres:
    image: postgis/postgis:16-3.4
-   container_name: postgres
+   container_name: postgres-postgis
    environment:
      - POSTGRES_USER=postgres
      - POSTGRES_PASSWORD=postgres
@@ -27,7 +27,7 @@ services:
      - '${PG_ADMIN_DATA}:/var/lib/pgadmin'
    restart: always
 
-geoserver:
+ geoserver:
     image: docker.osgeo.org/geoserver:2.26.x
     container_name: geoserver
     ports:
