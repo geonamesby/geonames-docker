@@ -28,14 +28,27 @@ services:
    restart: always
 
  geoserver:
-    image: docker.osgeo.org/geoserver:2.26.x
-    container_name: geoserver
-    ports:
-      - "8092:8080"
-    environment:
-      INSTALL_EXTENSIONS: "true"
-      STABLE_EXTENSIONS: "ysld,h2"
-      COMMUNITY_EXTENSIONS: "ogcapi-features,ogcapi-images,ogcapi-maps,ogcapi-styles,ogcapi-tiles,sec-keycloak,sec-oauth2-openid-connect,spatialjson"
-    volumes:
-      - '${GEOSERVER_DATA}:/opt/geoserver_data'
-      - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
+   image: docker.osgeo.org/geoserver:2.26.x
+   container_name: geoserver
+   ports:
+     - "8092:8080"
+   environment:
+     INSTALL_EXTENSIONS: "true"
+     STABLE_EXTENSIONS: "ysld,h2"
+     COMMUNITY_EXTENSIONS: "ogcapi-features,ogcapi-images,ogcapi-maps,ogcapi-styles,ogcapi-tiles,sec-keycloak,sec-oauth2-openid-connect,spatialjson"
+   volumes:
+     - '${GEOSERVER_DATA}:/opt/geoserver_data'
+     - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
+ 
+ api-gateway:
+   image: enjoybymap/api-gateway:1.0.0
+   container_name: api-gateway
+   ports:
+     - "8080:8080"
+   volumes:
+     - '${GATEWAY_DATA}:/opt/geoserver_data'
+    
+      
+      
+ 
+ 
