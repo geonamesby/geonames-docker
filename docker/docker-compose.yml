@@ -1,5 +1,11 @@
 version: "3.8"
 
+networks:
+  geonames:
+    driver: bridge
+  admin:
+    driver: bridge
+
 services:
  postgres:
    image: postgis/postgis:16-3.4
@@ -13,6 +19,9 @@ services:
      - '5432:5432'
    volumes:
      - '${POSTGRES_DATA}:/var/lib/postgresql/data'
+   networks:
+     - geonames
+     - admin
    restart: always
 
  pgadmin:
@@ -25,7 +34,8 @@ services:
      - "5050:80"
    volumes:
      - '${PG_ADMIN_DATA}:/var/lib/pgadmin'
-   restart: always
+   networks:
+     - admin
 
  geoserver:
    image: docker.osgeo.org/geoserver:2.24.x
@@ -39,6 +49,10 @@ services:
    volumes:
      - '${GEOSERVER_DATA}:/opt/geoserver_data'
      - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
+   networks:
+     - geonames
+     - admin
+   restart: always
  
  api-gateway:
    image: enjoybymap/api-gateway:1.0.0
@@ -47,6 +61,8 @@ services:
      - "8080:8080"
    volumes:
      - '${GATEWAY_DATA}:/opt/gateway_data'
+   networks:
+     - geonames
    restart: always
   
  mongodb:
@@ -59,18 +75,23 @@ services:
      - MONGO_INITDB_ROOT_PASSWORD=mongo      
    volumes:
      - '${MONGO_DATA}:/data/db'
+   networks:
+     - geonames
+     - admin
    restart: always
    
  mongo-express:
    image: mongo-express
    container_name: mongo_express
    ports:
-     - "8081:8081"
+     - "8093:8081"
    environment:
      - ME_CONFIG_MONGODB_SERVER=mongodb
      - ME_CONFIG_MONGODB_PORT=27017
      - ME_CONFIG_MONGODB_ADMINUSERNAME=mongo
      - ME_CONFIG_MONGODB_ADMINPASSWORD=mongo 
+   networks:
+     - admin
    depends_on:
      - mongodb     
     
