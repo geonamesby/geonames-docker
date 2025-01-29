@@ -1,15 +1,9 @@
 version: "3.8"
 
-networks:
-  geonames:
-    driver: bridge
-  admin:
-    driver: bridge
-
 services:
  postgres:
    image: postgis/postgis:16-3.4
-   container_name: postgres-postgis
+   container_name: postgis
    environment:
      POSTGRES_USER: ${POSTGRES_USER}
      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -21,7 +15,6 @@ services:
      - '${POSTGRES_DATA}:/var/lib/postgresql/data'
    networks:
      - geonames
-     - admin
    restart: always
 
  pgadmin:
@@ -35,6 +28,7 @@ services:
    volumes:
      - '${PG_ADMIN_DATA}:/var/lib/pgadmin'
    networks:
+     - geonames
      - admin
 
  geoserver:
@@ -97,9 +91,26 @@ services:
    networks:
      - admin
    depends_on:
-     - mongodb     
-    
-      
-      
+     - mongodb   
+     
+ microservice-spatial:
+   image: enjoybymap/spatial:1.0.0
+   container_name: microservice-spatial  
+   ports:
+     - "8081:8081" 
+   environment:
+     SERVER_PORT: 8081
+     SPRING_DATASOURCE_URL: ${SPRING_DATASOURCE_URL}
+     SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
+     SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}     
+   networks:
+     - geonames
+   restart: always     
+   
+networks:
+  geonames:
+    driver: bridge
+  admin:
+    driver: bridge
  
  
