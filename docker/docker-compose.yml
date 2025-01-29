@@ -11,10 +11,10 @@ services:
    image: postgis/postgis:16-3.4
    container_name: postgres-postgis
    environment:
-     - POSTGRES_USER=postgres
-     - POSTGRES_PASSWORD=postgres
-     - POSTGRES_TIMEZONE=Europe/Minsk
-     - POSTGRES_LOG_TIMEZONE=Europe/Minsk
+     POSTGRES_USER: ${POSTGRES_USER}
+     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+     POSTGRES_TIMEZONE: Europe/Minsk
+     POSTGRES_LOG_TIMEZONE: Europe/Minsk
    ports:
      - '5432:5432'
    volumes:
@@ -28,8 +28,8 @@ services:
    container_name: pgadmin
    image: dpage/pgadmin4:7
    environment:
-     PGADMIN_DEFAULT_EMAIL: admin@admin.com
-     PGADMIN_DEFAULT_PASSWORD: admin
+    PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
    ports:
      - "5050:80"
    volumes:
@@ -46,6 +46,10 @@ services:
      INSTALL_EXTENSIONS: "true"
      STABLE_EXTENSIONS: "ysld,h2,mongodb"
      COMMUNITY_EXTENSIONS: "ogcapi-features,ogcapi-images,ogcapi-maps,ogcapi-styles,ogcapi-tiles,sec-keycloak,sec-oauth2-openid-connect,spatialjson,mongodb-schemaless"
+     CORS_ENABLED: true
+     CORS_ALLOWED_ORIGINS: ${CLIENT_ORIGIN_HOST}
+     CORS_ALLOWED_METHODS: GET,POST,PUT,DELETE,HEAD,OPTIONS
+     CORS_ALLOWED_HEADERS: Origin,Accept,X-Requested-With,Content-Type,Access-Control-Request-Method,Access-Control-Request-Headers
    volumes:
      - '${GEOSERVER_DATA}:/opt/geoserver_data'
      - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
@@ -71,8 +75,8 @@ services:
    ports:
      - "27017:27017"
    environment:
-     - MONGO_INITDB_ROOT_USERNAME=mongo
-     - MONGO_INITDB_ROOT_PASSWORD=mongo      
+     - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+     - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}      
    volumes:
      - '${MONGO_DATA}:/data/db'
    networks:
@@ -88,8 +92,8 @@ services:
    environment:
      - ME_CONFIG_MONGODB_SERVER=mongodb
      - ME_CONFIG_MONGODB_PORT=27017
-     - ME_CONFIG_MONGODB_ADMINUSERNAME=mongo
-     - ME_CONFIG_MONGODB_ADMINPASSWORD=mongo 
+     - ME_CONFIG_MONGODB_ADMINUSERNAME=${ME_CONFIG_MONGODB_ADMINUSERNAME}
+     - ME_CONFIG_MONGODB_ADMINPASSWORD=${ME_CONFIG_MONGODB_ADMINPASSWORD} 
    networks:
      - admin
    depends_on:
