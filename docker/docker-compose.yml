@@ -35,7 +35,7 @@ services:
    image: docker.osgeo.org/geoserver:2.24.x
    container_name: geoserver
    ports:
-     - "8092:8080"
+     - "127.0.0.1:8092:8080"
    environment:
      INSTALL_EXTENSIONS: "true"
      STABLE_EXTENSIONS: "ysld,h2,mongodb"
@@ -49,7 +49,6 @@ services:
      - '${GEOSERVER_EXTENSIONS}:/opt/additional_libs'
    networks:
      - geonames
-     - admin
    restart: always
  
  api-gateway:
@@ -57,6 +56,8 @@ services:
    container_name: api-gateway
    ports:
      - "8080:8080"
+   environment:
+      GEOSERVER_HOST: ${GEOSERVER_HOST}  
    volumes:
      - '${GATEWAY_DATA}:/opt/gateway_data'
    networks:
