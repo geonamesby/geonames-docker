@@ -17,20 +17,6 @@ services:
      - geonames
    restart: always
 
- pgadmin:
-   container_name: pgadmin
-   image: dpage/pgadmin4:7
-   environment:
-    PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-    PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-   ports:
-     - "5050:80"
-   volumes:
-     - '${PG_ADMIN_DATA}:/var/lib/pgadmin'
-   networks:
-     - geonames
-     - admin
-
  geoserver:
    image: docker.osgeo.org/geoserver:2.24.x
    container_name: geoserver
