@@ -87,7 +87,7 @@ services:
      - mongodb   
      
  microservice-spatial:
-   image: enjoybymap/spatial:1.0.0
+   image: enjoybymap/spatial-service:1.0.0
    container_name: microservice-spatial  
    ports:
      - "8081" 
