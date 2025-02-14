@@ -24,7 +24,7 @@ services:
      - "127.0.0.1:8092:8080"
    environment:
      INSTALL_EXTENSIONS: "true"
-     STABLE_EXTENSIONS: "ysld,h2,mongodb"
+     STABLE_EXTENSIONS: "ysld,h2,mongodb,vectortiles"
      COMMUNITY_EXTENSIONS: "ogcapi-features,ogcapi-images,ogcapi-maps,ogcapi-styles,ogcapi-tiles,sec-keycloak,sec-oauth2-openid-connect,spatialjson,mongodb-schemaless"
      CORS_ENABLED: true
      CORS_ALLOWED_ORIGINS: ${CLIENT_ORIGIN_HOST}
